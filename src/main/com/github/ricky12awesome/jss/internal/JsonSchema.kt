@@ -64,10 +64,10 @@ internal fun SerialDescriptor.jsonSchemaObjectMap(definitions: JsonSchemaDefinit
     val (key, value) = elementDescriptors.toList()
 
     require(key.kind == PrimitiveKind.STRING) {
-      "cannot have non string keys in maps"
+      "cannot have non string keys in maps, ${this.serialName} $key $value"
     }
 
-    it["additionalProperties"] = value.createJsonSchema(getElementAnnotations(1), definitions)
+    it["additionalProperties"] = value.createJsonSchema(getElementAnnotations(1) + annotations, definitions)
   }
 }
 
@@ -134,7 +134,7 @@ internal fun SerialDescriptor.jsonSchemaArray(
   return jsonSchemaElement(annotations) {
     val type = getElementDescriptor(0)
 
-    it["items"] = type.createJsonSchema(getElementAnnotations(0), definitions)
+    it["items"] = type.createJsonSchema(getElementAnnotations(0) + annotations, definitions)
   }
 }
 
